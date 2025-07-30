@@ -5,10 +5,22 @@ import { NavLink, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
 
-  const {token} = useContext(AppContext)
+  const {token, setToken} = useContext(AppContext)
   const navigate = useNavigate()
 
-  return token && (
+  const logout = () =>{
+
+    const confirmLogout = window.confirm("Are you sure want to Logout ?")
+    if(confirmLogout)
+    {
+      localStorage.removeItem('token')
+      setToken('')
+      navigate('/login')
+    }
+    
+  }
+
+  return (
     <div className="flex items-center justify-between bg-gray-200 py-1 mb-5 border-b border-b-gray-400">
       <img onClick={()=>navigate('/')} className="px-5 w-44 cursor-pointer" src={assets.logo} alt="logo"/>
       <ul className="flex items-start gap-8 font-semibold">
@@ -34,7 +46,12 @@ const Navbar = () => {
       </ul>
 
       <div className="px-5">
-        <button className="bg-fuchsia-500 text-white px-8 py-2 rounded-full font-medium cursor-pointer">Create Account</button>
+        {
+          token
+          ? <button onClick={logout} className="bg-fuchsia-500 text-white px-8 py-2 rounded-full font-medium cursor-pointer">Logout</button>
+          : <button onClick={()=>navigate('/login')} className="bg-fuchsia-500 text-white px-8 py-2 rounded-full font-medium cursor-pointer">Create Account</button>
+        }
+        
       </div>
     </div>
   )

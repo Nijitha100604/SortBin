@@ -1,15 +1,11 @@
-import React from 'react'
-import { useContext } from 'react'
-import { AppContext } from '../context/AppContext'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const Footer = () => {
 
-  const {token} = useContext(AppContext)
   const navigate = useNavigate()
 
-  return token && (
-    <div className="bg-gray-200 border border-gray-400 fixed bottom-0 left-0 w-full">
+  return(
+    <div className="bg-gray-200 border border-gray-400 mt-4">
       <div className="flex flex-col sm:grid grid-cols-[1fr_1fr_1fr] gap-14 my-5 mt-5 text-sm mx-10">
         <div>
           <p className="text-xl font-medium mb-5 text-center">Project Info</p>

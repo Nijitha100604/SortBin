@@ -1,8 +1,16 @@
 import React from 'react'
+import AboutBanner from '../components/AboutBanner'
+import AboutBannerTwo from '../components/AboutBannerTwo'
+import CoreFeatures from '../components/coreFeatures'
+
 
 const About = () => {
   return (
-    <div>About</div>
+    <div>
+      <AboutBanner />
+      <AboutBannerTwo />
+      <CoreFeatures />
+    </div>
   )
 }
 
