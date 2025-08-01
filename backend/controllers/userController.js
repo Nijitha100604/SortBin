@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import userModel from './../models/userModel.js'
 import {v2 as cloudinary} from 'cloudinary'
+import feedbackModel from '../models/feedbackModel.js'
 
 // API to register a user
 
@@ -86,7 +87,39 @@ const userLogin = async(req, res) =>{
 
 }
 
+// API to post a feedback
+
+const userFeedback = async(req,res) =>{
+    try{
+        const {name, email, message} = req.body
+        const userId = req.user.userId;
+
+        if(!validator.isEmail(email))
+        {
+            return res.json({success: false, message: "Please enter a valid email"})
+        }
+
+        const feedbackData = {
+            userId,
+            name, 
+            email,
+            message
+        }
+
+        const newFeedback = new feedbackModel(feedbackData)
+        const feedback = await newFeedback.save()
+
+        res.json({success: true, message: "Feedback Submitted"})
+
+
+    } catch(error){
+        console.log(error)
+        res.json({success: false, message: error.message})
+    }
+}
+
 export {
     userRegister,
-    userLogin
+    userLogin,
+    userFeedback
 }

@@ -25,6 +25,9 @@ import plastic_bottle from './plastic_bottle.png'
 import react_logo from './react_logo.png'
 import rest_api from './rest_api.jpg'
 import servo_motor from './servo_motor.jpg'
+import gas_sensor from './gas_sensor.jpg'
+import yolo from './yolo.jpg'
+import postman from './postman.png'
 
 
 // Images used in frontend
@@ -56,7 +59,10 @@ export const assets = {
     plastic_bottle,
     react_logo,
     rest_api,
-    servo_motor
+    servo_motor,
+    gas_sensor,
+    yolo,
+    postman
 }
 
 
@@ -78,5 +84,77 @@ export const coreFeatures = [
     {
         image: core_real,
         data: 'Real-Time IOT Monitoring'
+    }
+]
+
+
+// hardware technologies data
+
+export const hardwareTechnologies = [
+    {
+        image: arduino_R4,
+        name: 'Microcontroller'
+    },
+    {
+        image: cam_module,
+        name: 'Camera module'
+    },
+    {
+        image: color_sensor,
+        name: 'Color sensor'
+    },
+    {
+        image: ir_sensor,
+        name: 'IR sensor'
+    },
+    {
+        image: servo_motor,
+        name: 'Servo motor'
+    },
+    {
+        image: metal_detector,
+        name: 'Metal Detector'
+    },
+    {
+        image: gas_sensor,
+        name: 'Gas Sensor'
+    }
+]
+
+
+// software technologies data
+
+export const softwareTechnologies = [
+    {
+        image: edge_impulse,
+        name: 'Edge Impluse'
+    },
+    {
+        image: arduino_ide,
+        name: 'Arduino IDE'
+    },
+    {
+        image: mongodb_logo,
+        name: 'MongoDB'
+    },
+    {
+        image: nodejs_logo,
+        name: 'NodeJs'
+    },
+    {
+        image: react_logo,
+        name: 'ReactJs'
+    },
+    {
+        image: rest_api,
+        name: 'RestFul API'
+    },
+    {
+        image: yolo,
+        name: 'Yolo V8'
+    },
+    {
+        image: postman,
+        name: 'Postman'
     }
 ]
