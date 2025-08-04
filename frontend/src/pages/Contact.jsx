@@ -2,6 +2,8 @@ import React, { useContext, useState } from 'react'
 import { AppContext } from './../context/AppContext';
 import { toast } from 'react-toastify';
 import axios from 'axios'
+import { team } from '../assets/assets';
+import { FaLinkedin } from "react-icons/fa";
 
 const Contact = () => {
   const [name, setName] = useState('')
@@ -35,6 +37,7 @@ const Contact = () => {
   }
 
   return (
+    <div>
     <div className="flex justify-center items-center">
       <div className="bg-gray-200 border border-black-400 p-8 rounded-2xl shadow-md min-w-[450px]">
 
@@ -64,7 +67,6 @@ const Contact = () => {
             />
           </div>
 
-          {/* Message */}
           <div>
             <p className="font-medium mb-1">Message</p>
             <textarea 
@@ -87,6 +89,26 @@ const Contact = () => {
 
         </form>
       </div>
+
+    </div>
+
+    <p className="mx-30 mt-8 font-semibold text-xl">Team Contact</p>
+
+    <div className="mx-20 flex flex-wrap justify-center gap-6 mt-8 mb-8">
+      {
+        team.map((item,index)=>(
+          <div key={index} className="p-6 border rounded-xl shadow-md bg-sky-100 hover:shadow-lg transition-transform transform hover:scale-105 flex flex-col items-center text-center w-56">
+            <img className="rounded-full w-25 h-25 bg-white border-gray-400 border-2" src={item.image} alt="team-image"/>
+            <p className="text-lg font-semibold">{item.name}</p>
+            <p className="text-gray-600 text-sm mb-2">{item.role}</p>
+            <a  href={item.linkedIn} target="_blank" rel="noopener noreferrer" className="mt-3 flex items-center gap-1 text-blue-600 hover:text-blue-800 font-medium">
+              <FaLinkedin className="text-2xl"/> LinkedIn
+            </a>
+          </div>
+        ))
+      }
+    </div>
+
     </div>
   )
 }

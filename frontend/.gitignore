@@ -12,6 +12,13 @@ dist
 dist-ssr
 *.local
 
+
+# Ignore specific images
+src/assets/gowshik.png
+src/assets/kavina.png
+src/assets/nijitha.jpg
+src/assets/vishva.png
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

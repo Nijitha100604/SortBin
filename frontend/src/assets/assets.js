@@ -28,6 +28,10 @@ import servo_motor from './servo_motor.jpg'
 import gas_sensor from './gas_sensor.jpg'
 import yolo from './yolo.jpg'
 import postman from './postman.png'
+import nijitha from './nijitha.jpg'
+import kavina from './kavina.png'
+import gowshik from './gowshik.png'
+import vishva from './vishva.png'
 
 
 // Images used in frontend
@@ -62,7 +66,11 @@ export const assets = {
     servo_motor,
     gas_sensor,
     yolo,
-    postman
+    postman,
+    vishva,
+    gowshik,
+    kavina,
+    nijitha
 }
 
 
@@ -156,5 +164,32 @@ export const softwareTechnologies = [
     {
         image: postman,
         name: 'Postman'
+    }
+]
+
+export const team = [
+    {
+        image: nijitha,
+        name: 'Nijitha mol',
+        role: 'Backend Developer',
+        linkedIn: 'https://www.linkedin.com/in/nijitha-mol/'
+    },
+    {
+        image: kavina,
+        name: 'Kavina Sri Devi',
+        role: 'Frontend Developer',
+        linkedIn: 'https://www.linkedin.com/in/kavina-sri-devi-g-862314272/'
+    },
+    {
+        image: gowshik,
+        name: 'Gowshiknathan',
+        role: 'Circuit Designer',
+        linkedIn: 'https://www.linkedin.com/in/gowshiknathan-s-387a42275/'
+    },
+    {
+        image: vishva,
+        name: 'Vishva',
+        role: 'Database Management',
+        linkedIn: 'https://www.linkedin.com/in/vishva-k-904999285/'
     }
 ]
