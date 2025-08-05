@@ -7,7 +7,7 @@ const Technologies = () => {
     <div className="mx-20 flex flex-col gap-8">
         <div className="border border-1 bg-sky-50 rounded-2xl p-5">
             <p className="font-semibold mb-4">Hardware</p>
-            <div className="flex gap-14 mx-5">
+            <div className="flex flex-wrap gap-14 mx-5">
                 {
                     hardwareTechnologies.map((item, index)=>(
                         <div  key={index} className="relative flex flex-col group">
@@ -23,7 +23,7 @@ const Technologies = () => {
 
         <div className="border border-1 bg-sky-50 rounded-2xl p-5">
             <p className="font-semibold mb-4">Software</p>
-            <div className="flex gap-12 mx-5">
+            <div className="flex flex-wrap gap-10 mx-5">
                 {
                     softwareTechnologies.map((item, index)=>(
                         <div  key={index} className="relative flex flex-col group">

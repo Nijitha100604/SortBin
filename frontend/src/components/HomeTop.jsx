@@ -16,7 +16,7 @@ const HomeTop = () => {
                 <button onClick={()=>navigate('/about')} className="flex gap-2 mt-10 bg-fuchsia-500 text-white px-8 py-2 rounded-full font-medium cursor-pointer">Read More <ArrowRightIcon className="h-5 w-5" /></button>
             </div>
             <div>
-                <img className="w-70" src={assets.banner_img} alt="Hometop-image"/>
+                <img className="w-70 md:block hidden" src={assets.banner_img} alt="Hometop-image"/>
             </div>
         </div>
     </div>
