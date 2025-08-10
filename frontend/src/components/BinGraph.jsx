@@ -1,13 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
+import { AppContext } from '../context/AppContext';
 
 const BinGraph = () => {
 
+    const {plastics, generals, metals, infecteds} = useContext(AppContext)
+
     const data = [
-        {name: "Plastics", value: 8},
-        {name: "General", value: 10},
-        {name: "Metals", value: 2},
-        {name: "Infectious", value: 7}
+        {name: "Plastics", value: plastics},
+        {name: "General", value: generals},
+        {name: "Metals", value: metals},
+        {name: "Infectious", value: infecteds}
     ]
 
     const colors = [

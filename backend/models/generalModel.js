@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 const generalSchema = new mongoose.Schema({
 
     userId: {type: String, required: true},
+    binName: {type: String, default: "General"},
     count: {type: Number, default: 0},
     fillLevel: {type: Number, default: 0},
     hazardousGas: {type: Boolean, default: false},

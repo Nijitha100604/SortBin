@@ -491,7 +491,7 @@ const addInfectedBin = async(req, res) =>{
 
         const newInfectedBin = new infectedModel(binData)
         const infectedBin = await newInfectedBin.save()
-        res.json({success: true, message: "General bin created"})
+        res.json({success: true, message: "Infected bin created"})
 
 
     } catch(error){
