@@ -157,9 +157,9 @@ const getPlasticDetails = async(req, res)=>{
             res.json({success: false, message: "Not a valid user"})
         }
 
-        const plasticBins = await plasticModel.find({userId})
+        const bin = await plasticModel.find({userId})
 
-        res.json({success: true, plasticBins})
+        res.json({success: true, bin})
 
 
     } catch(error){
@@ -182,6 +182,7 @@ const updatePlasticBin = async(req, res) =>{
         }
 
         bin.count += 1
+        bin.totalCount += 1
         const maxCapacity = 15
         bin.fillLevel = Math.min(Math.round((bin.count/maxCapacity)*100), 100)
         await bin.save()
@@ -277,9 +278,9 @@ const getMetalDetails = async(req, res)=>{
             res.json({success: false, message: "Not a valid user"})
         }
 
-        const metalBins = await metalModel.find({userId})
+        const bin = await metalModel.find({userId})
 
-        res.json({success: true, metalBins})
+        res.json({success: true, bin})
 
 
     } catch(error){
@@ -301,6 +302,7 @@ const updateMetalBin = async(req, res) =>{
         }
 
         bin.count += 1
+        bin.totalCount += 1
         const maxCapacity = 15
         bin.fillLevel = Math.min(Math.round((bin.count/maxCapacity)*100), 100)
         await bin.save()
@@ -395,9 +397,9 @@ const getGeneralDetails = async(req, res)=>{
             res.json({success: false, message: "Not a valid user"})
         }
 
-        const generalBins = await generalModel.find({userId})
+        const bin= await generalModel.find({userId})
 
-        res.json({success: true, generalBins})
+        res.json({success: true, bin})
 
 
     } catch(error){
@@ -419,6 +421,7 @@ const updateGeneralBin = async(req, res) =>{
         }
 
         bin.count += 1
+        bin.totalCount += 1
         const maxCapacity = 15
         bin.fillLevel = Math.min(Math.round((bin.count/maxCapacity)*100), 100)
         await bin.save()
@@ -513,9 +516,9 @@ const getInfectedDetails = async(req, res)=>{
             res.json({success: false, message: "Not a valid user"})
         }
 
-        const infectedBins = await infectedModel.find({userId})
+        const bin = await infectedModel.find({userId})
 
-        res.json({success: true, infectedBins})
+        res.json({success: true, bin})
 
 
     } catch(error){
@@ -537,6 +540,7 @@ const updateInfectedBin = async(req, res) =>{
         }
 
         bin.count += 1
+        bin.totalCount += 1
         const maxCapacity = 15
         bin.fillLevel = Math.min(Math.round((bin.count/maxCapacity)*100), 100)
         await bin.save()

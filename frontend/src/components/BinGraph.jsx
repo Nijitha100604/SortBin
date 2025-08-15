@@ -4,13 +4,13 @@ import { AppContext } from '../context/AppContext';
 
 const BinGraph = () => {
 
-    const {plastics, generals, metals, infecteds} = useContext(AppContext)
+    const {totPlastics, totGeneral, totMetal, totInfected} = useContext(AppContext)
 
     const data = [
-        {name: "Plastics", value: plastics},
-        {name: "General", value: generals},
-        {name: "Metals", value: metals},
-        {name: "Infectious", value: infecteds}
+        {name: "Plastics", value: totPlastics},
+        {name: "General", value: totGeneral},
+        {name: "Metals", value: totMetal},
+        {name: "Infectious", value: totInfected}
     ]
 
     const colors = [

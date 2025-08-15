@@ -32,6 +32,7 @@ import nijitha from './nijitha.jpg'
 import kavina from './kavina.png'
 import gowshik from './gowshik.png'
 import vishva from './vishva.png'
+import bin_details from './bin_details.png'
 
 
 // Images used in frontend
@@ -70,7 +71,8 @@ export const assets = {
     vishva,
     gowshik,
     kavina,
-    nijitha
+    nijitha,
+    bin_details
 }
 
 

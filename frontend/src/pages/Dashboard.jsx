@@ -5,10 +5,13 @@ import BinFull from '../components/BinFull';
 import { useContext } from 'react';
 import { AppContext } from '../context/AppContext';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
 
   const {token, getPlastics, plasticBin, getGeneral, generalBin, getMetal, metalBin, getInfected, infectedBin} = useContext(AppContext)
+
+  const navigate = useNavigate()
 
   useEffect(()=>{
     getPlastics(),
@@ -32,7 +35,7 @@ const Dashboard = () => {
 
       <div className="flex flex-wrap gap-16 lg:mx-18">
 
-        <div className="flex gap-5 items-center bg-sky-200 px-6 rounded-2xl cursor-pointer">
+        <div className="flex gap-5 items-center bg-sky-200 px-6 rounded-2xl cursor-pointer" onClick={()=>navigate('/bins/plastic-wastes')}>
           <img className="h-20 w-10" src={assets.plastic_bottle} alt="plastic-icon" />
           <div>
             <p className="font-bold text-2xl text-center mb-1">{plasticBin.count ? plasticBin.count : 0}</p>
@@ -40,7 +43,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="flex gap-5 items-center bg-lime-200 p-4 rounded-2xl cursor-pointer">
+        <div className="flex gap-5 items-center bg-lime-200 p-4 rounded-2xl cursor-pointer" onClick={()=>navigate('/bins/general-wastes')}>
           <img className="w-17" src={assets.general_waste} alt="general-icon" />
           <div>
             <p className="font-bold text-2xl text-center mb-1">{generalBin.count ? generalBin.count : 0}</p>
@@ -48,7 +51,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="flex gap-2 items-center bg-gray-300 px-4 rounded-2xl cursor-pointer">
+        <div className="flex gap-2 items-center bg-gray-300 px-4 rounded-2xl cursor-pointer" onClick={()=>navigate('/bins/metal-wastes')}>
           <img className="w-19 h-25" src={assets.needle} alt="needle-icon" />
           <div>
             <p className="font-bold text-2xl text-center mb-1">{metalBin.count ? metalBin.count : 0}</p>
@@ -56,7 +59,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="flex gap-2 items-center bg-red-300 rounded-2xl px-4 cursor-pointer">
+        <div className="flex gap-2 items-center bg-red-300 rounded-2xl px-4 cursor-pointer" onClick={()=>navigate('/bins/infected-wastes')}>
           <img className=" h-20 w-16" src={assets.blood} alt="blood-icon" />
           <div>
             <p className="font-bold text-2xl text-center mb-1">{infectedBin.count ? infectedBin.count : 0}</p>

@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import {ToastContainer, toast} from 'react-toastify'
 import { useContext } from 'react';
 import { AppContext } from './context/AppContext';
+import BinDetails from './pages/BinDetails';
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
           <Route path='/about' element={token ? <About /> : <Navigate to="/login" />}/>
           <Route path='/contact' element={token ? <Contact /> : <Navigate to="/login" />}/>
           <Route path='/dashboard' element={token ? <Dashboard /> : <Navigate to="/login" />}/>
+          <Route path='/bins/:type' element={token ? <BinDetails />: <Navigate to="/login" />}/>
         </Routes>
         {!hideLayout && <Footer />}
       </div>

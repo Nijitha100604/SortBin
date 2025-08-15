@@ -5,6 +5,7 @@ const plasticSchema = new mongoose.Schema({
     userId: {type: String, required: true},
     binName: {type: String, default: "Plastics"},
     count: {type: Number, default: 0},
+    totalCount: {type: Number, default: 0},
     fillLevel: {type: Number, default: 0},
     hazardousGas: {type: Boolean, default: false},
     updatedAt: {type: Date, default: Date.now},

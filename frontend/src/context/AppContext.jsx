@@ -22,6 +22,11 @@ const AppContextProvider = (props) =>{
   const [metals, setMetals] = useState(0)
   const [infecteds, setInfecteds] = useState(0)
 
+  const [totPlastics, setTotPlastics] = useState(0)
+  const [totGeneral, setTotGeneral] = useState(0)
+  const [totInfected, setTotInfected] = useState(0)
+  const [totMetal, setTotMetal] = useState(0)
+
   const getPlastics = async() =>{
     try{
       const {data} = await axios.get(backendUrl + '/api/user/plastic-wastes', {headers:{token}})
@@ -30,8 +35,9 @@ const AppContextProvider = (props) =>{
         toast.error(data.message)
       }
       else{
-        setPlasticBin(data.plasticBins[0])
-        setPlastics(prev => prev + data.plasticBins[0].count)
+        setPlasticBin(data.bin[0] ?? {})
+        setPlastics(data.bin[0].count ?? 0)
+        setTotPlastics(data.bin[0].totalCount ?? 0)
       }
     } catch(error){
       console.log(error)
@@ -43,8 +49,9 @@ const AppContextProvider = (props) =>{
     try{
       const {data} = await axios.get(backendUrl + '/api/user/general-wastes', {headers: {token}})
       if(data.success){
-        setGeneralBin(data.generalBins[0])
-        setGenerals(prev => prev + data.generalBins[0].count)
+        setGeneralBin(data.bin[0] ?? {})
+        setGenerals(data.bin[0].count ?? 0)
+        setTotGeneral(data.bin[0].totalCount ?? 0)
       }
       else
       {
@@ -60,8 +67,9 @@ const AppContextProvider = (props) =>{
     try{
       const {data} = await axios.get(backendUrl + '/api/user/metal-wastes', {headers: {token}})
       if(data.success){
-        setMetalBin(data.metalBins[0])
-        setMetals(prev => prev + data.metalBins[0].count)
+        setMetalBin(data.bin[0] ?? {})
+        setMetals(data.bin[0].count ?? 0)
+        setTotMetal(data.bin[0].totalCount ?? 0)
       }
       else{
         toast.error(data.message)
@@ -76,8 +84,9 @@ const AppContextProvider = (props) =>{
     try{
       const {data} = await axios.get(backendUrl + '/api/user/infected-wastes', {headers: {token}})
       if(data.success){
-        setInfectedBin(data.infectedBins[0])
-        setInfecteds(prev => prev + data.infectedBins[0].count)
+        setInfectedBin(data.bin[0] ?? {})
+        setInfecteds(data.bin[0].count ?? 0)
+        setTotInfected(data.bin[0].totalCount ?? 0)
       }
       else
       {
@@ -99,7 +108,11 @@ const AppContextProvider = (props) =>{
     plastics,
     generals,
     metals,
-    infecteds
+    infecteds,
+    totGeneral,
+    totInfected,
+    totMetal,
+    totPlastics
   }
   
   return(
