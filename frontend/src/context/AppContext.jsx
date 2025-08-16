@@ -27,6 +27,9 @@ const AppContextProvider = (props) =>{
   const [totInfected, setTotInfected] = useState(0)
   const [totMetal, setTotMetal] = useState(0)
 
+  const [hazardous, setHazardous] = useState([])
+  const [binFull, setBinFull] = useState([])
+
   const getPlastics = async() =>{
     try{
       const {data} = await axios.get(backendUrl + '/api/user/plastic-wastes', {headers:{token}})
@@ -38,6 +41,17 @@ const AppContextProvider = (props) =>{
         setPlasticBin(data.bin[0] ?? {})
         setPlastics(data.bin[0].count ?? 0)
         setTotPlastics(data.bin[0].totalCount ?? 0)
+        if(data.bin[0].hazardousGas ?? false)
+        {
+          setHazardous((prev) => {
+            const exists = prev.some((bin) => bin._id === data.bin[0]._id);
+            return exists ? prev : [...prev, data.bin[0]];
+          })
+        }
+        if((data.bin[0].fillLevel ?? 0) >= 90)
+        {
+          setBinFull((prev)=>[...prev, data.bin[0]])
+        }
       }
     } catch(error){
       console.log(error)
@@ -52,6 +66,17 @@ const AppContextProvider = (props) =>{
         setGeneralBin(data.bin[0] ?? {})
         setGenerals(data.bin[0].count ?? 0)
         setTotGeneral(data.bin[0].totalCount ?? 0)
+        if(data.bin[0].hazardousGas ?? false)
+        {
+          setHazardous((prev) => {
+            const exists = prev.some((bin) => bin._id === data.bin[0]._id);
+            return exists ? prev : [...prev, data.bin[0]];
+          })
+        }
+        if((data.bin[0].fillLevel ?? 0) >= 90)
+        {
+          setBinFull((prev)=>[...prev, data.bin[0]])
+        }
       }
       else
       {
@@ -70,6 +95,17 @@ const AppContextProvider = (props) =>{
         setMetalBin(data.bin[0] ?? {})
         setMetals(data.bin[0].count ?? 0)
         setTotMetal(data.bin[0].totalCount ?? 0)
+        if(data.bin[0].hazardousGas ?? false)
+        {
+          setHazardous((prev) => {
+            const exists = prev.some((bin) => bin._id === data.bin[0]._id);
+            return exists ? prev : [...prev, data.bin[0]];
+          })
+        }
+        if((data.bin[0].fillLevel ?? 0) >= 90)
+        {
+          setBinFull((prev)=>[...prev, data.bin[0]])
+        }
       }
       else{
         toast.error(data.message)
@@ -87,6 +123,17 @@ const AppContextProvider = (props) =>{
         setInfectedBin(data.bin[0] ?? {})
         setInfecteds(data.bin[0].count ?? 0)
         setTotInfected(data.bin[0].totalCount ?? 0)
+        if(data.bin[0].hazardousGas ?? false)
+        {
+          setHazardous((prev) => {
+            const exists = prev.some((bin) => bin._id === data.bin[0]._id);
+            return exists ? prev : [...prev, data.bin[0]];
+          })
+        }
+        if((data.bin[0].fillLevel ?? 0) >= 90)
+        {
+          setBinFull((prev)=>[...prev, data.bin[0]])
+        }
       }
       else
       {
@@ -112,7 +159,9 @@ const AppContextProvider = (props) =>{
     totGeneral,
     totInfected,
     totMetal,
-    totPlastics
+    totPlastics,
+    hazardous,
+    binFull
   }
   
   return(

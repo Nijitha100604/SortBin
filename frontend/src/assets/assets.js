@@ -33,6 +33,7 @@ import kavina from './kavina.png'
 import gowshik from './gowshik.png'
 import vishva from './vishva.png'
 import bin_details from './bin_details.png'
+import notification_icon from './notification_icon.png'
 
 
 // Images used in frontend
@@ -72,7 +73,8 @@ export const assets = {
     gowshik,
     kavina,
     nijitha,
-    bin_details
+    bin_details,
+    notification_icon
 }
 
 

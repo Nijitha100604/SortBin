@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
 
-  const {token, getPlastics, plasticBin, getGeneral, generalBin, getMetal, metalBin, getInfected, infectedBin} = useContext(AppContext)
+  const {token, getPlastics, plasticBin, getGeneral, generalBin, getMetal, metalBin, getInfected, infectedBin, hazardous} = useContext(AppContext)
 
   const navigate = useNavigate()
 
@@ -85,9 +85,22 @@ const Dashboard = () => {
               <p className="text-lg font-semibold">Warning details</p>
             </div>
 
-            <div>
-              <p>No hazardous gas found</p>
-            </div>
+            <div className="flex flex-col gap-2">
+
+            {
+                hazardous.length > 0 ?
+
+                hazardous.map((item, index)=>(
+                    <div key={index} className="flex border justify-between p-2 rounded-xl items-center bg-gray-200 px-8">
+                        <p className="font-medium text-m">{item.binName}</p>
+                        <button className="border px-2 py-1 rounded-xl bg-orange-400 text-white">Hazardous gas found</button>
+                    </div>
+                ))
+
+                : <p className="text-gray-700 text-lg mx-10">No Data found</p>
+            }
+
+          </div>
 
           </div>
 

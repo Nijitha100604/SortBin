@@ -1,12 +1,13 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { AppContext } from '../context/AppContext'
 import { assets } from './../assets/assets';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
 
-  const {token, setToken} = useContext(AppContext)
+  const {token, setToken, hazardous, binFull} = useContext(AppContext)
   const navigate = useNavigate()
+  const [showNotifications, setShowNotifications] = useState(false)
 
   const logout = () =>{
 
@@ -45,14 +46,47 @@ const Navbar = () => {
         </NavLink>
       </ul>
 
-      <div className="px-5">
+      <div className="flex">
+        <div className="relative inline-block">
+          <img className="w-10 cursor-pointer" src={assets.notification_icon} alt="notification-icon" onClick={() => setShowNotifications((prev) => !prev)}/>
+          {
+            (hazardous.length > 0 || binFull.length > 0)
+            && <span className="absolute top-1 right-2 block h-3 w-3 rounded-full bg-red-500"></span>           
+          }
+          {
+            showNotifications && (
+              <div className="fixed top-[60px] right-5 w-80 bg-gray-300 border border-gray-500 shadow-lg rounded-lg p-3 z-50">
+                {hazardous.length > 0 && 
+                  hazardous.map((item, index)=>(
+                      <div key={index}>
+                        <p className="text-red-600 font-medium p-2">Hazardous gas detected in {item.binName} bin!</p>
+                      </div>
+                    ))}
+                {binFull.length > 0 && 
+                    binFull.map((item, index)=>(
+                      <div key={index}>
+                        <p className="text-yellow-600 font-medium p-2">{item.binName} bin almost full !</p>
+                      </div>
+                    ))
+                }
+                {hazardous.length == 0 && binFull.length == 0 && <p className="text-gray-900">No new notifications</p>}
+              </div>
+            )
+          }
+        </div>
+
+        <div className="px-5">
         {
           token
           ? <button onClick={logout} className="bg-fuchsia-500 text-white px-8 py-2 rounded-full font-medium cursor-pointer">Logout</button>
           : <button onClick={()=>navigate('/login')} className="bg-fuchsia-500 text-white px-8 py-2 rounded-full font-medium cursor-pointer">Create Account</button>
         }
         
+        </div>
+
       </div>
+
+      
     </div>
   )
 }

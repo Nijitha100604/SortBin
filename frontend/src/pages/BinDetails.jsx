@@ -104,7 +104,14 @@ const BinDetails = () => {
               <FaExclamationTriangle size={24} className="text-orange-500" />
               <p className="text-lg font-semibold">Warning details</p>
             </div>
-            <p>No hazardous gas found</p>
+            {
+              binData.hazardousGas 
+              ? <div>
+                <p className="text-red-700 font-medium text-lg mx-10">Hazardous Gas found!</p>
+              </div>
+              : <p className="text-gray-700 font-medium mx-10">No hazardous gas found</p> 
+            }
+            
           </div>
 
           {/* Updated and cleaned Details */}
