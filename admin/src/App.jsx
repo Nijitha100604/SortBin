@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import { ToastContainer, toast } from 'react-toastify';
-import { Navigate, useLocation, Routes, Route } from 'react-router-dom';
+import { Navigate, Routes, Route } from 'react-router-dom';
 import { useContext } from 'react';
 import { AdminContext } from './context/AdminContext';
 import TopNavbar from './components/TopNavbar';
@@ -15,16 +15,14 @@ import Feedback from './pages/Feedback';
 
 function App() {
 
-  const location = useLocation()
-  const hideLayout = location.pathname === '/admin-login'
   const {aToken} = useContext(AdminContext)
 
-  return (
-    <>
-      <div>
+  return aToken ? (
+      <div className="bg-[#F8F9FD]">
         <ToastContainer />
-        {!hideLayout && <TopNavbar />}
-        {!hideLayout && <SideNavbar />}
+        <TopNavbar />
+        <div className="flex items-start">
+        <SideNavbar />
         <Routes>
           <Route path='/' element={aToken ? <AdminHome /> : <Navigate to="/admin-login" />}/>
           <Route path='/admin-login' element={<AdminLogin />}/>
@@ -33,7 +31,13 @@ function App() {
           <Route path='/emergency' element={aToken ? <Emergency /> : <Navigate to="/admin-login" />}/>
           <Route path='/feedback' element={aToken ? <Feedback /> : <Navigate to="/admin-login" />}/>
         </Routes>
+        </div>
       </div>
+  ) :
+  (
+    <>
+      <AdminLogin />
+      <ToastContainer />
     </>
   )
 }

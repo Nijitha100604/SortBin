@@ -1,16 +1,18 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useContext } from 'react';
 import { AdminContext } from '../context/AdminContext';
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 
 const AdminLogin = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
-  const {backendUrl, setAToken} = useContext(AdminContext)
+  const {backendUrl, setAToken, aToken} = useContext(AdminContext)
+  const navigate = useNavigate()
 
   const onSubmitHandler = async(event) =>{
     event.preventDefault()
@@ -21,8 +23,6 @@ const AdminLogin = () => {
       {
         localStorage.setItem('aToken', data.aToken)
         setAToken(data.aToken)
-        setEmail('')
-        setPassword('')
       }
       else
       {
@@ -34,6 +34,14 @@ const AdminLogin = () => {
       toast.error(error)
     }
   }
+
+  useEffect(()=>{
+    if(aToken)
+    {
+      navigate('/')
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[aToken])
 
   return (
     <form className="min-h-[100vh] flex items-center bg-gray-200" onSubmit={onSubmitHandler}>
