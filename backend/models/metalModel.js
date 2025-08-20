@@ -2,7 +2,6 @@ import mongoose from 'mongoose'
 
 const metalSchema = new mongoose.Schema({
 
-    userId: {type: String, required: true},
     binName: {type: String, default: "Metals"},
     count: {type: Number, default: 0},
     totalCount: {type: Number, default: 0},
@@ -20,11 +19,4 @@ metalSchema.pre('save', function (next) {
     next()
 })
 
-metalSchema.statics.markAsCleaned = async function (id) {
-    return this.findByIdAndUpdate(id, {
-        lastCleanedAt: new Date()
-    }, { new: true })
-}
-
-const metalModel = new mongoose.model('metal', metalSchema)
-export default metalModel
+export default metalSchema

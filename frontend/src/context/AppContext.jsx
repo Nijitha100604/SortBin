@@ -38,17 +38,18 @@ const AppContextProvider = (props) =>{
         toast.error(data.message)
       }
       else{
-        setPlasticBin(data.bin[0] ?? {})
-        setPlastics(data.bin[0].count ?? 0)
-        setTotPlastics(data.bin[0].totalCount ?? 0)
-        if(data.bin[0].hazardousGas ?? false)
+        const bin = data.user.plasticsData
+        setPlasticBin(bin ?? {})
+        setPlastics(bin.count ?? 0)
+        setTotPlastics(bin.totalCount ?? 0)
+        if(bin.hazardousGas ?? false)
         {
           setHazardous((prev) => {
             const exists = prev.some((bin) => bin._id === data.bin[0]._id);
             return exists ? prev : [...prev, data.bin[0]];
           })
         }
-        if((data.bin[0].fillLevel ?? 0) >= 90)
+        if((bin.fillLevel ?? 0) >= 90)
         {
           setBinFull((prev)=>[...prev, data.bin[0]])
         }
@@ -63,17 +64,18 @@ const AppContextProvider = (props) =>{
     try{
       const {data} = await axios.get(backendUrl + '/api/user/general-wastes', {headers: {token}})
       if(data.success){
-        setGeneralBin(data.bin[0] ?? {})
-        setGenerals(data.bin[0].count ?? 0)
-        setTotGeneral(data.bin[0].totalCount ?? 0)
-        if(data.bin[0].hazardousGas ?? false)
+        const bin = data.user.generalsData
+        setGeneralBin(bin ?? {})
+        setGenerals(bin.count ?? 0)
+        setTotGeneral(bin.totalCount ?? 0)
+        if(bin.hazardousGas ?? false)
         {
           setHazardous((prev) => {
             const exists = prev.some((bin) => bin._id === data.bin[0]._id);
             return exists ? prev : [...prev, data.bin[0]];
           })
         }
-        if((data.bin[0].fillLevel ?? 0) >= 90)
+        if((bin.fillLevel ?? 0) >= 90)
         {
           setBinFull((prev)=>[...prev, data.bin[0]])
         }
@@ -92,17 +94,18 @@ const AppContextProvider = (props) =>{
     try{
       const {data} = await axios.get(backendUrl + '/api/user/metal-wastes', {headers: {token}})
       if(data.success){
-        setMetalBin(data.bin[0] ?? {})
-        setMetals(data.bin[0].count ?? 0)
-        setTotMetal(data.bin[0].totalCount ?? 0)
-        if(data.bin[0].hazardousGas ?? false)
+        const bin = data.user.metalsData
+        setMetalBin(bin ?? {})
+        setMetals(bin.count ?? 0)
+        setTotMetal(bin.totalCount ?? 0)
+        if(bin.hazardousGas ?? false)
         {
           setHazardous((prev) => {
             const exists = prev.some((bin) => bin._id === data.bin[0]._id);
             return exists ? prev : [...prev, data.bin[0]];
           })
         }
-        if((data.bin[0].fillLevel ?? 0) >= 90)
+        if((bin.fillLevel ?? 0) >= 90)
         {
           setBinFull((prev)=>[...prev, data.bin[0]])
         }
@@ -120,17 +123,18 @@ const AppContextProvider = (props) =>{
     try{
       const {data} = await axios.get(backendUrl + '/api/user/infected-wastes', {headers: {token}})
       if(data.success){
-        setInfectedBin(data.bin[0] ?? {})
-        setInfecteds(data.bin[0].count ?? 0)
-        setTotInfected(data.bin[0].totalCount ?? 0)
-        if(data.bin[0].hazardousGas ?? false)
+        const bin = data.user.infectedsData
+        setInfectedBin(bin ?? {})
+        setInfecteds(bin.count ?? 0)
+        setTotInfected(bin.totalCount ?? 0)
+        if(bin.hazardousGas ?? false)
         {
           setHazardous((prev) => {
             const exists = prev.some((bin) => bin._id === data.bin[0]._id);
             return exists ? prev : [...prev, data.bin[0]];
           })
         }
-        if((data.bin[0].fillLevel ?? 0) >= 90)
+        if((bin.fillLevel ?? 0) >= 90)
         {
           setBinFull((prev)=>[...prev, data.bin[0]])
         }

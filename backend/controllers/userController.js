@@ -2,11 +2,6 @@ import validator from 'validator'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import userModel from './../models/userModel.js'
-import feedbackModel from '../models/feedbackModel.js'
-import plasticModel from '../models/plasticModel.js'
-import metalModel from './../models/metalModel.js';
-import generalModel from '../models/generalModel.js'
-import infectedModel from '../models/infectedModel.js'
 
 // API to register a user
 
@@ -128,12 +123,34 @@ const addPlasticBin = async(req, res) =>{
     try{
 
         const userId = req.user.userId
-        const binData = {
-            userId
+        const user = await userModel.findById(userId)
+        if(!user)
+        {
+            return res.json({success: false, message: "User not found"})
         }
 
-        const newPlasticBin = new plasticModel(binData)
-        const plasticBin = await newPlasticBin.save()
+        if(!user.plasticsData)
+        {
+            user.plasticsData = {}
+        }
+
+        await user.save()
+
+        let totalBin = await totalBinModel.findOne()
+        if(totalBin)
+        {
+            totalBin.plastics += 1
+            await totalBin.save()
+        }
+        else{
+            totalBin = new totalBinModel({
+                plastics: 1,
+                generals: 0,
+                metals: 0,
+                infectious: 0
+            })
+            await totalBin.save()
+        }
         res.json({success: true, message: "Plastic bin created"})
 
 
@@ -151,15 +168,13 @@ const getPlasticDetails = async(req, res)=>{
     try{
 
         const userId = req.user.userId
-        const user = await userModel.findById(userId)
+        const user = await userModel.findById(userId).select("name email phone plasticsData")
         if(!user)
         {
-            res.json({success: false, message: "Not a valid user"})
+            return res.json({success: false, message: "User not found"})
         }
 
-        const bin = await plasticModel.find({userId})
-
-        res.json({success: true, bin})
+        res.json({success: true, user})
 
 
     } catch(error){
@@ -175,7 +190,12 @@ const updatePlasticBin = async(req, res) =>{
     try{
 
         const userId = req.user.userId
-        const bin = await plasticModel.findOne({userId})
+        const user = await userModel.findById(userId)
+        if(!user)
+        {
+            res.json({success: false, message: "user not found"})
+        }
+        const bin = user.plasticsData
 
         if(!bin){
             return res.json({success: false, message: "Bin not found"})
@@ -185,7 +205,8 @@ const updatePlasticBin = async(req, res) =>{
         bin.totalCount += 1
         const maxCapacity = 15
         bin.fillLevel = Math.min(Math.round((bin.count/maxCapacity)*100), 100)
-        await bin.save()
+        
+        await user.save()
 
         res.json({success: true, message: "Plastic detected and bin updated"})
 
@@ -201,16 +222,17 @@ const plasticHazardousGas = async(req, res)=>{
     try{
 
         const userId =req.user.userId
-        const bin = await plasticModel.findOne({userId})
-
-        if(!bin)
+        const user = await userModel.findById(userId)
+        if(!user)
         {
-            return res.json({success: false, message: "Bin not found"})
+            return res.json({success: false, message: "User Not found"})
         }
+        
+        user.plasticsData.hazardousGas = true
+        user.plasticsData.updatedAt = new Date()
 
-        bin.hazardousGas = true
-        await bin.save()
-        res.json({success: true, message: "Hazardous Gas detected"})
+        await user.save()
+        res.json({success: true, message: "Hazardous Gas detected", plasticsData: user.plasticsData})
 
     } catch(error){
         console.log(error)
@@ -224,17 +246,18 @@ const plasticHazardousGas = async(req, res)=>{
 const cleanPlasticBin = async(req, res)=>{
     try{
         const userId = req.user.userId
-        const bin = await plasticModel.findOne({userId})
-        if(!bin)
+        const user = await userModel.findById(userId)
+        if(!user)
         {
-            return res.json({success: false, message: "Bin not found"})
+            return res.json({success: false, message:"User not found"})
         }
-        bin.count = 0
-        bin.fillLevel = 0
-        bin.hazardousGas = false
-        bin.lastCleanedAt = new Date()
         
-        await bin.save()
+        user.plasticsData.count = 0
+        user.plasticsData.fillLevel = 0
+        user.plasticsData.hazardousGas = false
+        user.plasticsData.lastCleanedAt = new Date()
+        
+        await user.save()
         res.json({success: true, message: "Plastic Bin cleaned successfully"})
 
     } catch(error){
@@ -250,12 +273,34 @@ const addMetalBin = async(req, res) =>{
     try{
 
         const userId = req.user.userId
-        const binData = {
-            userId
+        const user = await userModel.findById(userId)
+        if(!user)
+        {
+            return res.json({success: false, message: "User not found"})
+        }
+        
+        if(!user.metalsData)
+        {
+            user.metalsData = {}
         }
 
-        const newMetalBin = new metalModel(binData)
-        const metalBin = await newMetalBin.save()
+        await user.save()
+        
+        let totalBin = await totalBinModel.findOne()
+        if(totalBin)
+        {
+            totalBin.metals += 1
+            await totalBin.save()
+        }
+        else{
+            totalBin = new totalBinModel({
+                plastics: 0,
+                generals: 0,
+                metals: 1,
+                infectious: 0
+            })
+            await totalBin.save()
+        }
         res.json({success: true, message: "Metal bin created"})
 
 
@@ -272,15 +317,13 @@ const getMetalDetails = async(req, res)=>{
     try{
 
         const userId = req.user.userId
-        const user = await userModel.findById(userId)
+        const user = await userModel.findById(userId).select("name email phone metalsData")
         if(!user)
         {
             res.json({success: false, message: "Not a valid user"})
         }
 
-        const bin = await metalModel.find({userId})
-
-        res.json({success: true, bin})
+        res.json({success: true, user})
 
 
     } catch(error){
@@ -295,7 +338,14 @@ const updateMetalBin = async(req, res) =>{
     try{
 
         const userId = req.user.userId
-        const bin = await metalModel.findOne({userId})
+        const user = await userModel.findById(userId)
+
+        if(!user)
+        {
+            return res.json({success: false, message: "User not found"})
+        }
+
+        const bin = user.metalsData
 
         if(!bin){
             return res.json({success: false, message: "Bin not found"})
@@ -305,7 +355,8 @@ const updateMetalBin = async(req, res) =>{
         bin.totalCount += 1
         const maxCapacity = 15
         bin.fillLevel = Math.min(Math.round((bin.count/maxCapacity)*100), 100)
-        await bin.save()
+        
+        await user.save()
 
         res.json({success: true, message: "Metal detected and bin updated"})
 
@@ -321,15 +372,15 @@ const metalHazardousGas = async(req, res)=>{
     try{
 
         const userId =req.user.userId
-        const bin = await metalModel.findOne({userId})
-
-        if(!bin)
+        const user = await userModel.findById(userId)
+        if(!user)
         {
-            return res.json({success: false, message: "Bin not found"})
+            return res.json({success: false, message: "User not found"})
         }
+        user.metalsData.hazardousGas = true
+        user.metalsData.updatedAt = new Date()
 
-        bin.hazardousGas = true
-        await bin.save()
+        await user.save()
         res.json({success: true, message: "Hazardous Gas detected"})
 
     } catch(error){
@@ -343,17 +394,18 @@ const metalHazardousGas = async(req, res)=>{
 const cleanMetalBin = async(req, res)=>{
     try{
         const userId = req.user.userId
-        const bin = await metalModel.findOne({userId})
-        if(!bin)
+        const user = await userModel.findById(userId)
+         if(!user)
         {
-            return res.json({success: false, message: "Bin not found"})
+            return res.json({success: false, message:"User not found"})
         }
-        bin.count = 0
-        bin.fillLevel = 0
-        bin.hazardousGas = false
-        bin.lastCleanedAt = new Date()
         
-        await bin.save()
+        user.metalsData.count = 0
+        user.metalsData.fillLevel = 0
+        user.metalsData.hazardousGas = false
+        user.metalsData.lastCleanedAt = new Date()
+        
+        await user.save()
         res.json({success: true, message: "Metals Bin cleaned successfully"})
 
     } catch(error){
@@ -369,12 +421,36 @@ const addGeneralBin = async(req, res) =>{
     try{
 
         const userId = req.user.userId
-        const binData = {
-            userId
+        const user = await userModel.findById(userId)
+        if(!user)
+        {
+            return res.json({success: false, message: "User not found"})
+        }
+        
+        if(!user.generalsData)
+        {
+            user.generalsData = {}
         }
 
-        const newGeneralBin = new generalModel(binData)
-        const generalBin = await newGeneralBin.save()
+        await user.save()
+        
+
+        let totalBin = await totalBinModel.findOne()
+        if(totalBin)
+        {
+            totalBin.generals += 1
+            await totalBin.save()
+        }
+        else{
+            totalBin = new totalBinModel({
+                plastics: 0,
+                generals: 1,
+                metals: 0,
+                infectious: 0
+            })
+            await totalBin.save()
+        }
+
         res.json({success: true, message: "General bin created"})
 
 
@@ -391,15 +467,13 @@ const getGeneralDetails = async(req, res)=>{
     try{
 
         const userId = req.user.userId
-        const user = await userModel.findById(userId)
+        const user = await userModel.findById(userId).select("name email phone generalsData")
         if(!user)
         {
-            res.json({success: false, message: "Not a valid user"})
+            return res.json({success: false, message: "User not found"})
         }
 
-        const bin= await generalModel.find({userId})
-
-        res.json({success: true, bin})
+        res.json({success: true, user})
 
 
     } catch(error){
@@ -414,7 +488,13 @@ const updateGeneralBin = async(req, res) =>{
     try{
 
         const userId = req.user.userId
-        const bin = await generalModel.findOne({userId})
+        const user = await userModel.findById(userId)
+        if(!user)
+        {
+            res.json({success: false, message: "user not found"})
+        }
+        
+        const bin = user.generalsData
 
         if(!bin){
             return res.json({success: false, message: "Bin not found"})
@@ -424,7 +504,8 @@ const updateGeneralBin = async(req, res) =>{
         bin.totalCount += 1
         const maxCapacity = 15
         bin.fillLevel = Math.min(Math.round((bin.count/maxCapacity)*100), 100)
-        await bin.save()
+        
+        await user.save()
 
         res.json({success: true, message: "General detected and bin updated"})
 
@@ -440,15 +521,17 @@ const generalHazardousGas = async(req, res)=>{
     try{
 
         const userId =req.user.userId
-        const bin = await generalModel.findOne({userId})
-
-        if(!bin)
+        const user = await userModel.findById(userId)
+        if(!user)
         {
-            return res.json({success: false, message: "Bin not found"})
+            return res.json({success: false, message: "User Not found"})
         }
 
-        bin.hazardousGas = true
-        await bin.save()
+        user.generalsData.hazardousGas = true
+        user.generalsData.updatedAt = new Date()
+
+        await user.save()
+
         res.json({success: true, message: "Hazardous Gas detected"})
 
     } catch(error){
@@ -462,17 +545,18 @@ const generalHazardousGas = async(req, res)=>{
 const cleanGeneralBin = async(req, res)=>{
     try{
         const userId = req.user.userId
-        const bin = await generalModel.findOne({userId})
-        if(!bin)
+        const user = await userModel.findById(userId)
+        if(!user)
         {
-            return res.json({success: false, message: "Bin not found"})
+            return res.json({success: false, message:"User not found"})
         }
-        bin.count = 0
-        bin.fillLevel = 0
-        bin.hazardousGas = false
-        bin.lastCleanedAt = new Date()
         
-        await bin.save()
+        user.generalsData.count = 0
+        user.generalsData.fillLevel = 0
+        user.generalsData.hazardousGas = false
+        user.generalsData.lastCleanedAt = new Date()
+        
+        await user.save()
         res.json({success: true, message: "General Bin cleaned successfully"})
 
     } catch(error){
@@ -488,12 +572,35 @@ const addInfectedBin = async(req, res) =>{
     try{
 
         const userId = req.user.userId
-        const binData = {
-            userId
+        const user = await userModel.findById(userId)
+        if(!user)
+        {
+            return res.json({success: false, message: "User not found"})
         }
 
-        const newInfectedBin = new infectedModel(binData)
-        const infectedBin = await newInfectedBin.save()
+        if(!user.infectedsData)
+        {
+            user.infectedsData = {}
+        }
+
+        await user.save()
+
+        let totalBin = await totalBinModel.findOne()
+        if(totalBin)
+        {
+            totalBin.infectious += 1
+            await totalBin.save()
+        }
+        else{
+            totalBin = new totalBinModel({
+                plastics: 0,
+                generals: 0,
+                metals: 0,
+                infectious: 1
+            })
+            await totalBin.save()
+        }
+
         res.json({success: true, message: "Infected bin created"})
 
 
@@ -510,15 +617,13 @@ const getInfectedDetails = async(req, res)=>{
     try{
 
         const userId = req.user.userId
-        const user = await userModel.findById(userId)
+        const user = await userModel.findById(userId).select("name email phone infectedsData")
         if(!user)
         {
-            res.json({success: false, message: "Not a valid user"})
+            return res.json({success: false, message: "User not found"})
         }
 
-        const bin = await infectedModel.find({userId})
-
-        res.json({success: true, bin})
+        res.json({success: true, user})
 
 
     } catch(error){
@@ -533,7 +638,12 @@ const updateInfectedBin = async(req, res) =>{
     try{
 
         const userId = req.user.userId
-        const bin = await infectedModel.findOne({userId})
+        const user = await userModel.findById(userId)
+        if(!user)
+        {
+            res.json({success: false, message: "user not found"})
+        }
+        const bin = user.infectedsData
 
         if(!bin){
             return res.json({success: false, message: "Bin not found"})
@@ -543,9 +653,10 @@ const updateInfectedBin = async(req, res) =>{
         bin.totalCount += 1
         const maxCapacity = 15
         bin.fillLevel = Math.min(Math.round((bin.count/maxCapacity)*100), 100)
-        await bin.save()
+        
+        await user.save()
 
-        res.json({success: true, message: "Infectious waste detected and bin updated"})
+        res.json({success: true, message: "Infectious detected and bin updated"})
 
     } catch(error){
         console.log(error)
@@ -559,15 +670,16 @@ const infectedHazardousGas = async(req, res)=>{
     try{
 
         const userId =req.user.userId
-        const bin = await infectedModel.findOne({userId})
-
-        if(!bin)
+        const user = await userModel.findById(userId)
+        if(!user)
         {
-            return res.json({success: false, message: "Bin not found"})
+            return res.json({success: false, message: "User Not found"})
         }
+        
+        user.infectedsData.hazardousGas = true
+        user.infectedsData.updatedAt = new Date()
 
-        bin.hazardousGas = true
-        await bin.save()
+        await user.save()
         res.json({success: true, message: "Hazardous Gas detected"})
 
     } catch(error){
@@ -581,17 +693,18 @@ const infectedHazardousGas = async(req, res)=>{
 const cleanInfectedBin = async(req, res)=>{
     try{
         const userId = req.user.userId
-        const bin = await infectedModel.findOne({userId})
-        if(!bin)
+        const user = await userModel.findById(userId)
+        if(!user)
         {
-            return res.json({success: false, message: "Bin not found"})
+            return res.json({success: false, message:"User not found"})
         }
-        bin.count = 0
-        bin.fillLevel = 0
-        bin.hazardousGas = false
-        bin.lastCleanedAt = new Date()
         
-        await bin.save()
+        user.infectedsData.count = 0
+        user.infectedsData.fillLevel = 0
+        user.infectedsData.hazardousGas = false
+        user.infectedsData.lastCleanedAt = new Date()
+        
+        await user.save()
         res.json({success: true, message: "Infectious Bin cleaned successfully"})
 
     } catch(error){

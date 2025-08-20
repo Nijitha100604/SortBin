@@ -2,7 +2,6 @@ import mongoose from 'mongoose'
 
 const plasticSchema = new mongoose.Schema({
 
-    userId: {type: String, required: true},
     binName: {type: String, default: "Plastics"},
     count: {type: Number, default: 0},
     totalCount: {type: Number, default: 0},
@@ -20,11 +19,4 @@ plasticSchema.pre('save', function (next) {
     next()
 })
 
-plasticSchema.statics.markAsCleaned = async function (id) {
-    return this.findByIdAndUpdate(id, {
-        lastCleanedAt: new Date()
-    }, { new: true })
-}
-
-const plasticModel = new mongoose.model('plastic', plasticSchema)
-export default plasticModel
+export default plasticSchema

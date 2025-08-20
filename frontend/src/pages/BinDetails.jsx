@@ -16,9 +16,25 @@ const BinDetails = () => {
       const { data } = await axios.get(`${backendUrl}/api/user/${type}`, {
         headers: { token },
       });
+
       if (data.success) {
-        setBinData(data.bin[0]);
-        console.log(data.bin[0]);
+
+      let bin;
+
+      if (type === "plastic-wastes") {
+        bin = data.user.plasticsData;
+      } else if (type === "general-wastes") {
+        bin = data.user.generalsData;
+      } else if (type === "infected-wastes") {
+        bin = data.user.infectedsData;
+      } else if (type === "metal-wastes") {
+        bin = data.user.metalsData;
+      } else {
+        toast.error("Invalid waste type");
+        return;
+      }
+        setBinData(bin);
+        
       } else {
         toast.error(data.message);
       }
