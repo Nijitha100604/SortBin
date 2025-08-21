@@ -6,7 +6,7 @@ import { assets } from './../assets/assets';
 
 const TopNavbar = () => {
 
-  const {aToken, setAToken} = useContext(AdminContext)
+  const {aToken, setAToken, fullBins, hazardousBins} = useContext(AdminContext)
   const navigate = useNavigate()
   const [showNotifications, setShowNotifications] = useState(false)
   // eslint-disable-next-line no-unused-vars
@@ -29,12 +29,21 @@ const TopNavbar = () => {
         <div className="relative inline-block">
           <img className="w-10 cursor-pointer" src={assets.notification_icon} alt="notification-icon" onClick={() => setShowNotifications((prev)=>!prev)}/>
           {
-            notification &&  <span className="absolute top-1 right-2 block h-3 w-3 rounded-full bg-red-500"></span>
+            (fullBins.length > 0 || hazardousBins.length > 0)
+            &&  <span className="absolute top-1 right-2 block h-3 w-3 rounded-full bg-red-500"></span>
           }
           {
             showNotifications && (
-              <div>
-                <p>Notifications</p>
+              <div className="fixed top-[60px] right-5 w-80 bg-gray-300 border border-gray-500 shadow-lg rounded-lg p-3 z-50">
+                {
+                  fullBins.length > 0 && 
+                  <p className="text-yellow-600 font-medium p-2">Some bins level reached</p>
+                }
+                {
+                  hazardousBins.length > 0 &&
+                  <p className="text-red-600 font-medium p-2">Hazardous gas detected !</p>
+                }
+                {fullBins.length == 0 && hazardousBins.length == 0 && <p className="text-gray-900">No new notifications</p>}
               </div>
             )
           }

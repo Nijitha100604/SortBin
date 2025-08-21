@@ -74,7 +74,7 @@ const AdminHome = () => {
               <div key={index} className=" bg-white rounded-xl mx-2 flex flex-wrap text-center justify-between mb-2 max-sm:gap-5 max-sm:text-base sm:grid grid-cols-[1fr_3fr_2fr] gap-1 items-center text-gray-900 py-3 px-6 border">
                 <p>{item.name}</p>
                 <p>{item.email}</p>
-                <p>{item.phone}</p>
+                <p>+91 {item.phone}</p>
               </div>
             ))
           }

@@ -12,6 +12,48 @@ const AdminContextProvider = (props) =>{
 
     const [totalBins, setTotalBins] = useState({})
     const [users, setUsers] = useState([])
+    const [feedbacks, setFeedbacks] = useState([])
+
+    const threshold = 90
+
+    const fullBins = users.flatMap(user =>{
+    const bins = [
+      {data: user.plasticsData, name: "Plastics"},
+      {data: user.generalsData, name: "General"},
+      {data: user.metalsData, name: "Metals"},
+      {data: user.infectedsData, name: "Infectious"}
+    ]
+
+    return bins.filter(bin=>bin.data && bin.data.fillLevel >= threshold)
+    .map(bin => ({
+      userName: user.name,
+      binName: bin.name,
+      email: user.email,
+      fillLevel: bin.data.fillLevel,
+      updatedAt: bin.data.updatedAt,
+      binType: bin.data.binName
+    }))
+    })
+
+
+    const hazardousBins = users.flatMap(user =>{
+    const bins = [
+      {data: user.plasticsData, name: "Plastics"},
+      {data: user.generalsData, name: "General"},
+      {data: user.metalsData, name: "Metals"},
+      {data: user.infectedsData, name: "Infectious"}
+    ]
+
+    return bins.filter(bin=> bin.data && bin.data.hazardousGas)
+    .map(bin => ({
+      userName: user.name,
+      binName: bin.name,
+      email: user.email,
+      updatedAt: bin.data.updatedAt,
+      binType: bin.data.binName
+    }))
+    })
+
 
     const getTotalBins = async() =>{
         const {data} = await axios.get(backendUrl + '/api/admin/totalBins', {headers: {aToken}})
@@ -30,7 +72,25 @@ const AdminContextProvider = (props) =>{
             const {data} = await axios.get(backendUrl + '/api/admin/users', {headers: {aToken}})
             if(data.success)
             {
+                console.log(data.users)
                 setUsers(data.users)
+            }
+        } catch(error){
+            console.log(error)
+            toast.error(error.message)
+        }
+    }
+
+    const getAllFeedbacks = async() =>{
+        try{
+            const {data} = await axios.get(backendUrl + '/api/admin/feedbacks', {headers: {aToken}})
+            if(data.success)
+            {
+                setFeedbacks(data.feedbacks)
+            }
+            else
+            {
+                toast.error(data.message)
             }
         } catch(error){
             console.log(error)
@@ -45,7 +105,11 @@ const AdminContextProvider = (props) =>{
         getTotalBins,
         totalBins,
         getAllUsers,
-        users
+        users,
+        getAllFeedbacks,
+        feedbacks,
+        fullBins,
+        hazardousBins
     }
     return(
         <AdminContext.Provider value={value}>

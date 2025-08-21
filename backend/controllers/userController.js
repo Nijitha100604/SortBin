@@ -2,6 +2,7 @@ import validator from 'validator'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import userModel from './../models/userModel.js'
+import totalBinModel from '../models/admin/totalBinModel.js'
 
 // API to register a user
 
@@ -45,6 +46,26 @@ const userRegister = async(req,res) =>{
     const user = await newUser.save()
 
     const token = jwt.sign({id:user._id}, process.env.JWT_SECRET)
+
+    let totalBin = await totalBinModel.findOne()
+    if(totalBin)
+    {
+        totalBin.plastics += 1
+        totalBin.generals += 1
+        totalBin.infectious += 1
+        totalBin.metals += 1
+        await totalBin.save()
+    }
+    else{
+        totalBin = new totalBinModel({
+            plastics: 1,
+            generals: 1,
+            metals: 1,
+            infectious: 1
+        })
+        await totalBin.save()
+        }
+
     res.json({success: true, token})
 
     } catch(error){
@@ -136,21 +157,6 @@ const addPlasticBin = async(req, res) =>{
 
         await user.save()
 
-        let totalBin = await totalBinModel.findOne()
-        if(totalBin)
-        {
-            totalBin.plastics += 1
-            await totalBin.save()
-        }
-        else{
-            totalBin = new totalBinModel({
-                plastics: 1,
-                generals: 0,
-                metals: 0,
-                infectious: 0
-            })
-            await totalBin.save()
-        }
         res.json({success: true, message: "Plastic bin created"})
 
 
@@ -285,22 +291,7 @@ const addMetalBin = async(req, res) =>{
         }
 
         await user.save()
-        
-        let totalBin = await totalBinModel.findOne()
-        if(totalBin)
-        {
-            totalBin.metals += 1
-            await totalBin.save()
-        }
-        else{
-            totalBin = new totalBinModel({
-                plastics: 0,
-                generals: 0,
-                metals: 1,
-                infectious: 0
-            })
-            await totalBin.save()
-        }
+
         res.json({success: true, message: "Metal bin created"})
 
 
@@ -433,23 +424,6 @@ const addGeneralBin = async(req, res) =>{
         }
 
         await user.save()
-        
-
-        let totalBin = await totalBinModel.findOne()
-        if(totalBin)
-        {
-            totalBin.generals += 1
-            await totalBin.save()
-        }
-        else{
-            totalBin = new totalBinModel({
-                plastics: 0,
-                generals: 1,
-                metals: 0,
-                infectious: 0
-            })
-            await totalBin.save()
-        }
 
         res.json({success: true, message: "General bin created"})
 
@@ -584,22 +558,6 @@ const addInfectedBin = async(req, res) =>{
         }
 
         await user.save()
-
-        let totalBin = await totalBinModel.findOne()
-        if(totalBin)
-        {
-            totalBin.infectious += 1
-            await totalBin.save()
-        }
-        else{
-            totalBin = new totalBinModel({
-                plastics: 0,
-                generals: 0,
-                metals: 0,
-                infectious: 1
-            })
-            await totalBin.save()
-        }
 
         res.json({success: true, message: "Infected bin created"})
 
