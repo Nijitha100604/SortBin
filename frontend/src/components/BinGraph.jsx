@@ -23,6 +23,7 @@ const BinGraph = () => {
 
   return (
     <div className="w-full h-80">
+      <p className="text-sm font-medium">Overall count</p>
       <ResponsiveContainer>
         <BarChart
           data={data}
